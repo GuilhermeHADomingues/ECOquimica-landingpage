@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ECOQuímica – Gestão Inteligente de Produtos Químicos</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.min.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      --blue-deep:    #0B1F4A;
+      --blue-primary: #1246A8;
+      --blue-mid:     #1D6FD8;
+      --blue-light:   #3B9EFF;
+      --blue-glow:    #6DC0FF;
+      --green-accent: #22C55E;
+      --green-light:  #86EFAC;
+      --white:        #FFFFFF;
+      --gray-50:      #F8FAFC;
+      --gray-100:     #F1F5F9;
+      --gray-200:     #E2E8F0;
+      --gray-400:     #94A3B8;
+      --gray-600:     #475569;
+      --gray-800:     #1E293B;
+      --radius-lg:    1.25rem;
+      --radius-xl:    2rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--white);
+      color: var(--gray-800);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      backdrop-filter: blur(16px);
+      background: rgba(255,255,255,0.88);
+      border-bottom: 1px solid rgba(18,70,168,0.10);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 32px rgba(18,70,168,0.10); }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 2rem;
+    }
+    .logo {
+      display: flex; align-items: center; gap: .6rem;
+      font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem;
+      color: var(--blue-primary); text-decoration: none;
+    }
+    .logo-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue-primary), var(--blue-light));
+      display: grid; place-items: center;
+    }
+    .logo span.eco { color: var(--green-accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--gray-600); font-weight: 500; font-size: .93rem;
+      text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--blue-primary); }
+    .btn-nav {
+      padding: .55rem 1.4rem; border-radius: 8px;
+      background: var(--blue-primary); color: #fff;
+      font-family: 'Outfit', sans-serif; font-weight: 700; font-size: .9rem;
+      text-decoration: none; transition: background .2s, transform .15s;
+    }
+    .btn-nav:hover { background: var(--blue-mid); transform: translateY(-1px); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue-primary); border-radius: 2px; transition: all .3s; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(155deg, var(--blue-deep) 0%, var(--blue-primary) 45%, #0F3580 100%);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center;
+    }
+    .hero-bg-pattern {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(109,192,255,0.15) 0%, transparent 55%),
+        radial-gradient(circle at 80% 20%, rgba(34,197,94,0.10) 0%, transparent 45%),
+        radial-gradient(circle at 60% 80%, rgba(59,158,255,0.12) 0%, transparent 40%);
+    }
+    /* Hexagonal pattern */
+    .hero-hex {
+      position: absolute; right: -80px; top: 50%; transform: translateY(-50%);
+      width: 600px; height: 600px; opacity: .06;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52'%3E%3Cpath d='M30 2 L58 17 L58 47 L30 52 L2 47 L2 17 Z' fill='none' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E");
+      background-size: 60px 52px;
+    }
+    .hero-inner {
+      max-width: 1200px; margin: 0 auto; padding: 7rem 2rem 4rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+      color: var(--green-light); padding: .35rem 1rem; border-radius: 100px;
+      font-size: .82rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green-accent); animation: pulse-dot 2s infinite; }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+      font-weight: 800; color: #fff; line-height: 1.1;
+      letter-spacing: -.02em; margin-bottom: 1.2rem;
+    }
+    .hero-title .accent { color: var(--blue-glow); }
+    .hero-title .eco { color: var(--green-light); }
+    .hero-sub {
+      font-size: 1.08rem; color: rgba(255,255,255,.72);
+      line-height: 1.7; max-width: 520px; margin-bottom: 2.5rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-store {
+      display: flex; align-items: center; gap: .7rem;
+      padding: .85rem 1.6rem; border-radius: var(--radius-lg);
+      font-family: 'Outfit', sans-serif; font-weight: 700; font-size: .95rem;
+      text-decoration: none; transition: all .25s; cursor: pointer; border: none;
+    }
+    .btn-store-primary {
+      background: #fff; color: var(--blue-primary);
+    }
+    .btn-store-primary:hover { background: var(--blue-glow); color: var(--blue-deep); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(109,192,255,0.3); }
+    .btn-store-outline {
+      background: rgba(255,255,255,.10); color: #fff;
+      border: 1.5px solid rgba(255,255,255,.30);
+    }
+    .btn-store-outline:hover { background: rgba(255,255,255,.18); transform: translateY(-2px); }
+    .hero-stats {
+      display: flex; gap: 2rem; margin-top: 3.5rem; padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,.15);
+    }
+    .stat-item { display: flex; flex-direction: column; }
+    .stat-num { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.9rem; color: #fff; }
+    .stat-label { font-size: .82rem; color: rgba(255,255,255,.55); margin-top: .15rem; }
+    /* Mockup side */
+    .hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+    .phone-shell {
+      width: 260px; height: 540px; border-radius: 42px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07));
+      border: 1.5px solid rgba(255,255,255,0.25);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+      position: relative; overflow: hidden;
+      backdrop-filter: blur(4px);
+      animation: float 5s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+    .phone-notch {
+      position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+      width: 80px; height: 6px; border-radius: 3px;
+      background: rgba(255,255,255,0.35);
+    }
+    .phone-screen {
+      position: absolute; inset: 14px; border-radius: 30px;
+      background: linear-gradient(160deg, #e8f4ff 0%, #f0f9ff 100%);
+      overflow: hidden;
+    }
+    .phone-header {
+      background: var(--blue-primary); color: #fff; padding: 1rem 1.2rem .8rem;
+      font-family: 'Outfit', sans-serif; font-weight: 700; font-size: .85rem;
+    }
+    .phone-header small { font-family: 'Outfit', sans-serif; font-weight: 400; font-size: .68rem; opacity: .7; display: block; }
+    .phone-card {
+      margin: .8rem; background: #fff; border-radius: 12px;
+      padding: .8rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .phone-card-row { display: flex; align-items: center; gap: .6rem; margin-bottom: .5rem; }
+    .phone-card-dot { width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; }
+    .phone-card-label { font-size: .68rem; font-weight: 600; color: var(--gray-800); }
+    .phone-card-sub { font-size: .6rem; color: var(--gray-400); }
+    .phone-tag {
+      display: inline-block; font-size: .55rem; padding: 2px 7px; border-radius: 4px;
+      font-weight: 600; background: #DBEAFE; color: var(--blue-primary); margin-top: .3rem;
+    }
+    .phone-tag.green { background: #DCFCE7; color: #15803D; }
+    .phone-alert {
+      margin: 0 .8rem .6rem; background: #FEF9C3; border-radius: 10px;
+      padding: .6rem .8rem; border-left: 3px solid #EAB308;
+      font-size: .6rem; color: #713F12; font-weight: 500;
+    }
+    .phone-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: #fff; border-top: 1px solid var(--gray-200);
+      display: flex; justify-content: space-around; padding: .6rem 0;
+    }
+    .phone-icon-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      font-size: .5rem; color: var(--gray-400); cursor: pointer;
+    }
+    .phone-icon-btn.active { color: var(--blue-primary); }
+    .phone-icon-btn span { font-size: .5rem; }
+    .orbit {
+      position: absolute; border-radius: 50%;
+      border: 1px dashed rgba(255,255,255,0.15);
+      pointer-events: none;
+    }
+    .orbit-1 { width: 380px; height: 380px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation: spin 30s linear infinite; }
+    .orbit-2 { width: 520px; height: 520px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation: spin 50s linear infinite reverse; }
+    @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+    .orbit-dot {
+      position: absolute; width: 10px; height: 10px; border-radius: 50%;
+      background: var(--green-accent); top: -5px; left: 50%; margin-left: -5px;
+      box-shadow: 0 0 12px var(--green-accent);
+    }
+    .orbit-dot-2 {
+      position: absolute; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--blue-glow); bottom: -4px; left: 30%; margin-left: -4px;
+      box-shadow: 0 0 10px var(--blue-glow);
+    }
+
+    /* ─── SECTION BASE ─── */
+    section { padding: 6rem 2rem; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block; font-size: .78rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--blue-primary);
+      background: rgba(18,70,168,0.08); padding: .3rem .9rem; border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+    .section-tag.green { color: #15803D; background: rgba(34,197,94,0.10); }
+    .section-title {
+      font-size: clamp(1.9rem, 3.5vw, 2.8rem); font-weight: 800;
+      line-height: 1.15; letter-spacing: -.02em; color: var(--blue-deep);
+      margin-bottom: 1rem;
+    }
+    .section-sub {
+      font-size: 1.05rem; color: var(--gray-600);
+      line-height: 1.7; max-width: 640px;
+    }
+    .text-center { text-align: center; }
+    .text-center .section-sub { margin: 0 auto; }
+
+    /* ─── PROBLEM ─── */
+    .problem-section { background: var(--gray-50); }
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+    .problem-card {
+      background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-lg);
+      padding: 2rem; position: relative; overflow: hidden;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .problem-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(18,70,168,0.10); }
+    .problem-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--blue-primary), var(--blue-light));
+    }
+    .problem-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(18,70,168,0.08); display: grid; place-items: center;
+      margin-bottom: 1.2rem; color: var(--blue-primary);
+    }
+    .problem-card h3 {
+      font-size: 1.05rem; font-weight: 700; color: var(--blue-deep);
+      margin-bottom: .6rem;
+    }
+    .problem-card p { font-size: .92rem; color: var(--gray-600); line-height: 1.65; }
+
+    /* ─── SOLUTION ─── */
+    .solution-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+      align-items: center; margin-top: 2rem;
+    }
+    .solution-visual {
+      background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-mid) 100%);
+      border-radius: var(--radius-xl); padding: 2.5rem;
+      position: relative; overflow: hidden; min-height: 400px;
+    }
+    .solution-visual::after {
+      content: ''; position: absolute; right: -60px; bottom: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .solution-visual::before {
+      content: ''; position: absolute; left: -30px; top: -30px;
+      width: 140px; height: 140px; border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .solution-pill {
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 100px; padding: .4rem 1rem;
+      color: #fff; font-size: .8rem; font-weight: 600;
+      display: inline-flex; align-items: center; gap: .4rem;
+      margin-bottom: 1.5rem;
+    }
+    .sol-feature-list { display: flex; flex-direction: column; gap: 1rem; }
+    .sol-feature-item {
+      display: flex; align-items: center; gap: .9rem;
+      background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px; padding: .9rem 1.1rem;
+      color: #fff; font-size: .9rem; font-weight: 500;
+      transition: background .2s;
+    }
+    .sol-feature-item:hover { background: rgba(255,255,255,0.18); }
+    .sol-feature-item .icon-circle {
+      width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+      background: rgba(255,255,255,0.2); display: grid; place-items: center;
+    }
+    .solution-text .section-sub { max-width: 100%; }
+    .check-list { list-style: none; margin-top: 2rem; display: flex; flex-direction: column; gap: .8rem; }
+    .check-list li {
+      display: flex; align-items: flex-start; gap: .8rem;
+      font-size: .95rem; color: var(--gray-600); line-height: 1.55;
+    }
+    .check-list li .check { color: var(--green-accent); flex-shrink: 0; margin-top: 2px; }
+
+    /* ─── FEATURES ─── */
+    .features-section { background: var(--gray-50); }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+    .feature-card {
+      background: #fff; border-radius: var(--radius-lg); padding: 2rem;
+      border: 1px solid var(--gray-200); position: relative; overflow: hidden;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 24px 56px rgba(18,70,168,0.12); }
+    .feature-card.featured {
+      background: linear-gradient(155deg, var(--blue-deep) 0%, var(--blue-primary) 100%);
+      border-color: transparent; color: #fff;
+    }
+    .feature-icon {
+      width: 54px; height: 54px; border-radius: 14px; margin-bottom: 1.4rem;
+      display: grid; place-items: center; font-size: 1.4rem;
+    }
+    .feature-icon.blue { background: rgba(18,70,168,0.10); color: var(--blue-primary); }
+    .feature-icon.green { background: rgba(34,197,94,0.10); color: #16A34A; }
+    .feature-icon.white { background: rgba(255,255,255,0.15); color: #fff; }
+    .feature-card h3 {
+      font-size: 1.12rem; font-weight: 700; margin-bottom: .6rem; color: var(--blue-deep);
+    }
+    .feature-card.featured h3 { color: #fff; }
+    .feature-card p { font-size: .9rem; line-height: 1.65; color: var(--gray-600); }
+    .feature-card.featured p { color: rgba(255,255,255,.7); }
+    .feature-tag {
+      margin-top: 1.2rem; display: inline-block; font-size: .72rem; font-weight: 700;
+      padding: .25rem .75rem; border-radius: 6px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .feature-tag.blue { background: rgba(18,70,168,0.08); color: var(--blue-primary); }
+    .feature-tag.green { background: rgba(34,197,94,0.10); color: #15803D; }
+    .feature-tag.white { background: rgba(255,255,255,0.15); color: rgba(255,255,255,.9); }
+
+    /* ─── BENEFITS ─── */
+    .benefits-grid {
+      display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+    .benefit-card {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      background: var(--gray-50); border-radius: var(--radius-lg);
+      padding: 1.8rem; border: 1px solid var(--gray-200);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .benefit-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(18,70,168,0.08); }
+    .benefit-num {
+      font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800;
+      line-height: 1; color: var(--blue-primary); opacity: .15; flex-shrink: 0;
+      min-width: 52px;
+    }
+    .benefit-content h3 { font-size: 1.05rem; font-weight: 700; color: var(--blue-deep); margin-bottom: .4rem; }
+    .benefit-content p { font-size: .9rem; color: var(--gray-600); line-height: 1.6; }
+
+    /* ─── EDUCAÇÃO ─── */
+    .edu-section {
+      background: linear-gradient(160deg, var(--blue-deep) 0%, #0D2B6E 100%);
+      position: relative; overflow: hidden;
+    }
+    .edu-section::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 10% 80%, rgba(34,197,94,0.12) 0%, transparent 50%),
+        radial-gradient(circle at 90% 20%, rgba(59,158,255,0.10) 0%, transparent 50%);
+    }
+    .edu-section .section-title { color: #fff; }
+    .edu-section .section-sub { color: rgba(255,255,255,.65); }
+    .edu-cards {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 1.2rem;
+      margin-top: 3.5rem;
+    }
+    .edu-card {
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius-lg); padding: 1.8rem 1.4rem;
+      color: #fff; text-align: center;
+      transition: background .3s, transform .3s;
+    }
+    .edu-card:hover { background: rgba(255,255,255,.13); transform: translateY(-4px); }
+    .edu-card-icon {
+      width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 1.2rem;
+      background: rgba(255,255,255,.12); display: grid; place-items: center;
+      font-size: 1.5rem;
+    }
+    .edu-card h3 { font-size: .95rem; font-weight: 700; margin-bottom: .5rem; }
+    .edu-card p { font-size: .82rem; color: rgba(255,255,255,.6); line-height: 1.6; }
+
+    /* ─── IMPACTO AMBIENTAL ─── */
+    .impact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+      align-items: center;
+    }
+    .impact-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .impact-stat-card {
+      background: linear-gradient(135deg, var(--blue-primary), var(--blue-mid));
+      border-radius: var(--radius-lg); padding: 1.8rem;
+      color: #fff; position: relative; overflow: hidden;
+    }
+    .impact-stat-card::after {
+      content: ''; position: absolute; right: -20px; bottom: -20px;
+      width: 80px; height: 80px; border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+    }
+    .impact-stat-card.green {
+      background: linear-gradient(135deg, #15803D, #16A34A);
+    }
+    .impact-stat-card.light {
+      background: var(--gray-50); border: 1px solid var(--gray-200);
+    }
+    .impact-stat-card.light .stat-n { color: var(--blue-primary); }
+    .impact-stat-card.light .stat-l { color: var(--gray-600); }
+    .stat-n { font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; display: block; }
+    .stat-l { font-size: .82rem; opacity: .75; margin-top: .2rem; display: block; }
+    .impact-stat-card.light .stat-l { opacity: 1; }
+
+    /* ─── MOCKUP ─── */
+    .mockup-section { background: var(--gray-50); text-align: center; }
+    .mockup-phones {
+      display: flex; justify-content: center; align-items: flex-end;
+      gap: 1.5rem; margin-top: 3.5rem;
+    }
+    .mockup-phone {
+      border-radius: 36px; overflow: hidden;
+      box-shadow: 0 32px 64px rgba(18,70,168,0.18), 0 8px 24px rgba(0,0,0,0.1);
+      border: 1.5px solid rgba(18,70,168,0.15);
+      transition: transform .3s;
+    }
+    .mockup-phone:hover { transform: translateY(-8px); }
+    .mockup-phone.center { transform: scale(1.06); }
+    .mockup-phone.center:hover { transform: scale(1.06) translateY(-8px); }
+    .mockup-phone-screen {
+      background: linear-gradient(160deg, #1a4fa8 0%, #1D6FD8 50%, #e8f4ff 50%, #f8faff 100%);
+      display: flex; flex-direction: column;
+    }
+    .mock-header { background: var(--blue-primary); color: #fff; padding: 1.2rem 1.5rem .9rem; }
+    .mock-header-title { font-family: 'Syne',sans-serif; font-weight: 700; font-size: 1rem; }
+    .mock-header-sub { font-size: .7rem; opacity: .65; }
+    .mock-body { background: var(--gray-50); flex: 1; padding: .9rem; }
+    .mock-search {
+      background: #fff; border-radius: 10px; padding: .65rem 1rem;
+      font-size: .72rem; color: var(--gray-400); border: 1px solid var(--gray-200);
+      margin-bottom: .8rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .mock-item {
+      background: #fff; border-radius: 10px; padding: .8rem;
+      border: 1px solid var(--gray-200); margin-bottom: .6rem;
+      display: flex; align-items: center; gap: .7rem;
+    }
+    .mock-item-dot { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; }
+    .mock-item-info {}
+    .mock-item-name { font-size: .72rem; font-weight: 600; color: var(--gray-800); }
+    .mock-item-cas { font-size: .6rem; color: var(--gray-400); }
+    .mock-badge { font-size: .5rem; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+    .mock-badge.danger { background: #FEE2E2; color: #991B1B; }
+    .mock-badge.safe { background: #DCFCE7; color: #15803D; }
+    .map-placeholder {
+      background: linear-gradient(135deg, #DBEAFE, #EFF6FF);
+      border-radius: 12px; height: 130px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: var(--blue-primary); font-size: .78rem; font-weight: 600; gap: .5rem;
+      border: 1px dashed rgba(18,70,168,0.25);
+    }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-mid) 60%, #1A82F0 100%);
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+        radial-gradient(circle at 75% 30%, rgba(34,197,94,0.15) 0%, transparent 50%);
+    }
+    .cta-section .section-title { color: #fff; }
+    .cta-section .section-sub { color: rgba(255,255,255,.72); }
+    .cta-btns { display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; margin-top: 2.5rem; }
+    .cta-btn-white {
+      background: #fff; color: var(--blue-primary);
+      padding: 1rem 2rem; border-radius: var(--radius-lg);
+      font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem;
+      display: inline-flex; align-items: center; gap: .7rem;
+      text-decoration: none; transition: all .25s;
+    }
+    .cta-btn-white:hover { background: var(--blue-glow); color: var(--blue-deep); transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,0,0,0.2); }
+    .cta-btn-outline {
+      background: transparent; color: #fff;
+      border: 2px solid rgba(255,255,255,0.4);
+      padding: 1rem 2rem; border-radius: var(--radius-lg);
+      font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem;
+      display: inline-flex; align-items: center; gap: .7rem;
+      text-decoration: none; transition: all .25s;
+    }
+    .cta-btn-outline:hover { border-color: rgba(255,255,255,0.8); transform: translateY(-2px); }
+    .cta-trust {
+      display: flex; justify-content: center; align-items: center; gap: 2rem;
+      margin-top: 3rem; flex-wrap: wrap;
+    }
+    .cta-trust-item {
+      display: flex; align-items: center; gap: .5rem;
+      color: rgba(255,255,255,.6); font-size: .83rem;
+    }
+    .cta-trust-item svg { opacity: .7; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--blue-deep); color: rgba(255,255,255,.5);
+      padding: 2.5rem 2rem; text-align: center;
+    }
+    footer .logo-footer {
+      font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.3rem;
+      color: #fff; margin-bottom: .5rem; display: block;
+    }
+    footer .logo-footer span { color: var(--green-accent); }
+    footer p { font-size: .85rem; }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-up {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up-delay-1 { transition-delay: .1s; }
+    .fade-up-delay-2 { transition-delay: .2s; }
+    .fade-up-delay-3 { transition-delay: .3s; }
+    .fade-up-delay-4 { transition-delay: .4s; }
+    .fade-up-delay-5 { transition-delay: .5s; }
+    .fade-up-delay-6 { transition-delay: .6s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+      .hero-sub { margin: 0 auto 2.5rem; }
+      .hero-btns { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .hero-visual { display: none; }
+      .problem-grid { grid-template-columns: 1fr; }
+      .solution-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .edu-cards { grid-template-columns: 1fr 1fr; }
+      .impact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .mockup-phones { flex-direction: column; align-items: center; }
+      .mockup-phone.center { transform: scale(1); }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      nav .btn-nav { display: none; }
+    }
+    @media (max-width: 560px) {
+      section { padding: 4rem 1.2rem; }
+      .edu-cards { grid-template-columns: 1fr; }
+      .impact-stats { grid-template-columns: 1fr; }
+    }
+
+    /* Mobile Nav */
+    .mobile-menu {
+      position: fixed; top: 72px; left: 0; right: 0; z-index: 99;
+      background: rgba(255,255,255,0.97); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 1.5rem 2rem; display: none; flex-direction: column; gap: 1.2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--gray-600); font-weight: 500; text-decoration: none;
+      font-size: 1rem; transition: color .2s;
+    }
+    .mobile-menu a:hover { color: var(--blue-primary); }
+    .mobile-menu .btn-nav {
+      display: inline-block; text-align: center; padding: .8rem;
+    }
+  </style>
+</head>
+<body x-data="{ menuOpen: false, scrolled: false }" @scroll.window="scrolled = window.scrollY > 20">
+
+<!-- ─── NAV ─── -->
+<nav :class="{'scrolled': scrolled}">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+      </div>
+      <span><span class="eco">ECO</span>Química</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problema">Problema</a></li>
+      <li><a href="#funcionalidades">Funcionalidades</a></li>
+      <li><a href="#educacao">Educação</a></li>
+      <li><a href="#impacto">Impacto</a></li>
+    </ul>
+    <a href="#download" class="btn-nav">Baixar App</a>
+    <button class="hamburger" @click="menuOpen = !menuOpen" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" :class="{'open': menuOpen}">
+  <a href="#problema" @click="menuOpen=false">Problema</a>
+  <a href="#funcionalidades" @click="menuOpen=false">Funcionalidades</a>
+  <a href="#educacao" @click="menuOpen=false">Educação</a>
+  <a href="#impacto" @click="menuOpen=false">Impacto</a>
+  <a href="#download" class="btn-nav" @click="menuOpen=false">Baixar App</a>
+</div>
+
+<!-- ─── HERO ─── -->
+<section class="hero" id="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-hex"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge fade-up visible">
+        <div class="hero-badge-dot"></div>
+        Disponível para iOS e Android
+      </div>
+      <h1 class="hero-title fade-up visible">
+        Gestão inteligente de <span class="accent">produtos químicos</span> com <span class="eco">responsabilidade</span> e segurança
+      </h1>
+      <p class="hero-sub fade-up visible">
+        O ECOQuímica transforma a complexidade das fichas de segurança em informação clara, acessível e prática — para profissionais, estudantes e empresas que levam a sério o cuidado com o meio ambiente.
+      </p>
+      <div class="hero-btns fade-up visible" id="download">
+        <a href="#" class="btn-store btn-store-primary">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          App Store
+        </a>
+        <a href="#" class="btn-store btn-store-outline">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.37.21.8.21 1.17.01l11.56-6.43-2.54-2.55-10.19 8.97zm14.11-7.83l2.6-1.45c.74-.41.74-1.53 0-1.94l-2.6-1.45-2.72 2.42 2.72 2.42zM4.35.24c-.38-.21-.81-.21-1.17.01L13.37 9.2l2.54-2.55L4.35.24zM2.44 1.1C2.17 1.45 2 1.92 2 2.46v19.08c0 .54.17 1.01.44 1.36l.07.07 10.69-10.69v-.25L2.51 1.03l-.07.07z"/></svg>
+          Google Play
+        </a>
+      </div>
+      <div class="hero-stats fade-up visible">
+        <div class="stat-item">
+          <span class="stat-num">5K+</span>
+          <span class="stat-label">FDS catalogadas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">Gratuito e acessível</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">GHS</span>
+          <span class="stat-label">Padrão internacional</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+      <div class="orbit orbit-2"><div class="orbit-dot-2"></div></div>
+      <div class="phone-shell">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-header">
+            ECOQuímica
+            <small>Gestão de Produtos Químicos</small>
+          </div>
+          <div class="phone-card">
+            <div class="phone-card-row">
+              <div class="phone-card-dot" style="background:linear-gradient(135deg,#1246A8,#3B9EFF)"></div>
+              <div>
+                <div class="phone-card-label">Ácido Clorídrico</div>
+                <div class="phone-card-sub">HCl · CAS 7647-01-0</div>
+              </div>
+            </div>
+            <span class="phone-tag">⚠ Corrosivo</span>
+            <span class="phone-tag">⚠ Irritante</span>
+          </div>
+          <div class="phone-alert">
+            ⚡ Incompatível com bases fortes e metais
+          </div>
+          <div class="phone-card">
+            <div class="phone-card-row">
+              <div class="phone-card-dot" style="background:linear-gradient(135deg,#15803D,#22C55E)"></div>
+              <div>
+                <div class="phone-card-label">Etanol Absoluto</div>
+                <div class="phone-card-sub">C₂H₅OH · CAS 64-17-5</div>
+              </div>
+            </div>
+            <span class="phone-tag green">✓ Descarte regulado</span>
+          </div>
+          <div class="phone-card" style="background:rgba(239,246,255,0.7)">
+            <div class="phone-card-label" style="margin-bottom:.3rem">📍 Ponto de descarte próximo</div>
+            <div class="phone-card-sub">EcoDescarte SP · 2,4 km</div>
+          </div>
+          <div class="phone-bottom">
+            <div class="phone-icon-btn active">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              <span>Início</span>
+            </div>
+            <div class="phone-icon-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <span>Busca</span>
+            </div>
+            <div class="phone-icon-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>Segurança</span>
+            </div>
+            <div class="phone-icon-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Descarte</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROBLEMA ─── -->
+<section class="problem-section" id="problema">
+  <div class="section-inner">
+    <div class="text-center fade-up">
+      <div class="section-tag">O Problema</div>
+      <h2 class="section-title">Lidar com produtos químicos<br>é mais complexo do que parece</h2>
+      <p class="section-sub">Milhares de profissionais, estudantes e empresas enfrentam diariamente os mesmos desafios — sem ferramentas adequadas para resolvê-los.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card fade-up fade-up-delay-1">
+        <div class="problem-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <h3>FDS são difíceis de interpretar</h3>
+        <p>As Fichas de Dados de Segurança são documentos densos, técnicos e extensos. Para quem não é especialista, entender os riscos reais é praticamente impossível.</p>
+      </div>
+      <div class="problem-card fade-up fade-up-delay-2">
+        <div class="problem-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3>Descarte incorreto causa danos sérios</h3>
+        <p>Jogar produtos químicos no esgoto ou no lixo comum é ilegal e perigoso. A maioria das pessoas não sabe onde ou como descartar corretamente — e paga um alto preço por isso.</p>
+      </div>
+      <div class="problem-card fade-up fade-up-delay-3">
+        <div class="problem-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Falta de educação sobre riscos químicos</h3>
+        <p>Pictogramas de risco, diagramas de Hommel e normas de compatibilidade são desconhecidos pela maioria. Esse gap de conhecimento representa risco real à saúde e ao ambiente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SOLUÇÃO ─── -->
+<section id="solucao">
+  <div class="section-inner">
+    <div class="solution-grid">
+      <div class="solution-visual fade-up">
+        <div class="solution-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          A solução que faltava
+        </div>
+        <h2 style="color:#fff;font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:1.5rem;line-height:1.2;">
+          Tudo o que você precisa saber sobre segurança química, no seu celular
+        </h2>
+        <div class="sol-feature-list">
+          <div class="sol-feature-item">
+            <div class="icon-circle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+            </div>
+            Consulta rápida de FDS em segundos
+          </div>
+          <div class="sol-feature-item">
+            <div class="icon-circle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            Pictogramas explicados de forma simples
+          </div>
+          <div class="sol-feature-item">
+            <div class="icon-circle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            Empresas de descarte por geolocalização
+          </div>
+          <div class="sol-feature-item">
+            <div class="icon-circle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            Conteúdo educativo interativo
+          </div>
+        </div>
+      </div>
+      <div class="solution-text fade-up fade-up-delay-2">
+        <div class="section-tag">A Solução</div>
+        <h2 class="section-title">ECOQuímica:<br>simples, intuitivo e <span style="color:var(--blue-primary)">poderoso</span></h2>
+        <p class="section-sub">Desenvolvemos uma plataforma que transforma a gestão de produtos químicos em algo acessível para todos — do estudante de química ao profissional experiente, da pequena empresa à indústria.</p>
+        <ul class="check-list">
+          <li>
+            <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+            Interface intuitiva, sem necessidade de treinamento técnico
+          </li>
+          <li>
+            <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+            Linguagem acessível, adaptada ao nível do usuário
+          </li>
+          <li>
+            <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+            Base de dados atualizada com padrão GHS/ABNT
+          </li>
+          <li>
+            <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+            Comprometido com a proteção ambiental e humana
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FUNCIONALIDADES ─── -->
+<section class="features-section" id="funcionalidades">
+  <div class="section-inner">
+    <div class="text-center fade-up">
+      <div class="section-tag">Funcionalidades</div>
+      <h2 class="section-title">Tudo que você precisa,<br>em um só lugar</h2>
+      <p class="section-sub">Três pilares integrados para transformar a forma como você lida com produtos químicos no dia a dia.</p>
+    </div>
+    <div class="features-grid" style="margin-top:3.5rem">
+      <div class="feature-card fade-up fade-up-delay-1">
+        <div class="feature-icon blue">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <h3>Gestão de FDS</h3>
+        <p>Armazene, organize e consulte Fichas de Dados de Segurança de qualquer produto químico. Busca rápida por nome, fórmula ou número CAS. Informações técnicas traduzidas em linguagem clara.</p>
+        <span class="feature-tag blue">Gestão</span>
+      </div>
+      <div class="feature-card featured fade-up fade-up-delay-2">
+        <div class="feature-icon white">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Educação e Segurança</h3>
+        <p>Aprenda sobre pictogramas GHS, interprete o diagrama de Hommel, descubra incompatibilidades entre reagentes e entenda as normas de descarte e os riscos ambientais e biológicos.</p>
+        <span class="feature-tag white">★ Principal</span>
+      </div>
+      <div class="feature-card fade-up fade-up-delay-3">
+        <div class="feature-icon green">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3>Destinação de Resíduos</h3>
+        <p>Encontre empresas especializadas no descarte correto de resíduos químicos na sua região. Geolocalização em tempo real, informações de contato e certificações de cada parceiro.</p>
+        <span class="feature-tag green">Sustentável</span>
+      </div>
+    </div>
+
+    <!-- Detalhe extra -->
+    <div style="margin-top:2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem" class="fade-up">
+      <div style="background:#fff;border:1px solid var(--gray-200);border-radius:1rem;padding:1.4rem;display:flex;align-items:center;gap:.9rem;">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(18,70,168,0.08);display:grid;place-items:center;flex-shrink:0;color:var(--blue-primary)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--blue-deep)">Busca Inteligente</div>
+          <div style="font-size:.78rem;color:var(--gray-400)">Por nome, CAS ou fórmula</div>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--gray-200);border-radius:1rem;padding:1.4rem;display:flex;align-items:center;gap:.9rem;">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(34,197,94,0.10);display:grid;place-items:center;flex-shrink:0;color:#16A34A">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M7 13s1 2 5 2 5-2 5-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--blue-deep)">Interface Amigável</div>
+          <div style="font-size:.78rem;color:var(--gray-400)">Fácil para qualquer pessoa</div>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--gray-200);border-radius:1rem;padding:1.4rem;display:flex;align-items:center;gap:.9rem;">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(18,70,168,0.08);display:grid;place-items:center;flex-shrink:0;color:var(--blue-primary)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--blue-deep)">100% Mobile</div>
+          <div style="font-size:.78rem;color:var(--gray-400)">Acesso offline disponível</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BENEFÍCIOS ─── -->
+<section>
+  <div class="section-inner">
+    <div class="text-center fade-up">
+      <div class="section-tag">Benefícios</div>
+      <h2 class="section-title">Por que escolher o ECOQuímica?</h2>
+      <p class="section-sub">Mais do que um app, uma ferramenta de transformação — na sua rotina e no seu impacto no mundo.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card fade-up fade-up-delay-1">
+        <div class="benefit-num">01</div>
+        <div class="benefit-content">
+          <h3>Redução de Riscos</h3>
+          <p>Identifique perigos em segundos e tome decisões mais seguras no manuseio, armazenamento e transporte de produtos químicos. Menos acidentes, mais proteção.</p>
+        </div>
+      </div>
+      <div class="benefit-card fade-up fade-up-delay-2">
+        <div class="benefit-num">02</div>
+        <div class="benefit-content">
+          <h3>Facilidade de Entendimento</h3>
+          <p>Traduzimos o jargão técnico das FDS em linguagem simples e visual. Qualquer pessoa — seja especialista ou leiga — consegue entender os riscos e agir corretamente.</p>
+        </div>
+      </div>
+      <div class="benefit-card fade-up fade-up-delay-3">
+        <div class="benefit-num">03</div>
+        <div class="benefit-content">
+          <h3>Contribuição Ambiental</h3>
+          <p>Ao facilitar o descarte correto e educar sobre riscos ambientais, cada usuário do ECOQuímica se torna um agente de proteção ao meio ambiente e à biodiversidade.</p>
+        </div>
+      </div>
+      <div class="benefit-card fade-up fade-up-delay-4">
+        <div class="benefit-num">04</div>
+        <div class="benefit-content">
+          <h3>Economia de Tempo</h3>
+          <p>Chega de navegar por documentos de 20 páginas. O ECOQuímica entrega as informações essenciais de forma rápida, organizada e pesquisável — economizando horas de trabalho.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EDUCAÇÃO ─── -->
+<section class="edu-section" id="educacao">
+  <div class="section-inner" style="position:relative">
+    <div class="text-center fade-up">
+      <div class="section-tag green">Módulo Educativo</div>
+      <h2 class="section-title">Aprenda química com segurança</h2>
+      <p class="section-sub">Conteúdo didático, visual e interativo para quem quer entender de verdade os produtos químicos que usa no dia a dia.</p>
+    </div>
+    <div class="edu-cards">
+      <div class="edu-card fade-up fade-up-delay-1">
+        <div class="edu-card-icon">⚠️</div>
+        <h3>Pictogramas GHS</h3>
+        <p>Entenda cada símbolo de risco: o que significa, quando aparece e como se proteger adequadamente.</p>
+      </div>
+      <div class="edu-card fade-up fade-up-delay-2">
+        <div class="edu-card-icon">🔷</div>
+        <h3>Diagrama de Hommel</h3>
+        <p>Visualize de forma intuitiva o diamante de risco NFPA 704 e interprete cada quadrante com clareza.</p>
+      </div>
+      <div class="edu-card fade-up fade-up-delay-3">
+        <div class="edu-card-icon">⚗️</div>
+        <h3>Incompatibilidade</h3>
+        <p>Descubra quais reagentes não podem ser misturados e os perigos de reações indesejadas em laboratório.</p>
+      </div>
+      <div class="edu-card fade-up fade-up-delay-4">
+        <div class="edu-card-icon">🌿</div>
+        <h3>Riscos Ambientais</h3>
+        <p>Saiba como os produtos químicos afetam o solo, a água e os seres vivos — e como minimizar esses impactos.</p>
+      </div>
+    </div>
+
+    <!-- Bônus educativo -->
+    <div style="margin-top:2.5rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:1.5rem;padding:2.5rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;" class="fade-up">
+      <div style="flex:1;min-width:240px">
+        <div style="color:var(--green-light);font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:.5rem">
+          📋 Normas e Licenças para Descarte
+        </div>
+        <p style="color:rgba(255,255,255,.65);font-size:.92rem;line-height:1.65">
+          Além dos conteúdos educativos, o app traz as principais normas regulatórias (ABNT, CONAMA, IBAMA) e os tipos de licenças exigidos para o descarte legal de resíduos químicos — essencial para empresas e laboratórios.
+        </p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.7rem;min-width:200px">
+        <div style="background:rgba(255,255,255,.10);border-radius:.75rem;padding:.7rem 1rem;color:#fff;font-size:.85rem;font-weight:500;display:flex;align-items:center;gap:.6rem">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          ABNT NBR 10004
+        </div>
+        <div style="background:rgba(255,255,255,.10);border-radius:.75rem;padding:.7rem 1rem;color:#fff;font-size:.85rem;font-weight:500;display:flex;align-items:center;gap:.6rem">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          CONAMA 430/2011
+        </div>
+        <div style="background:rgba(255,255,255,.10);border-radius:.75rem;padding:.7rem 1rem;color:#fff;font-size:.85rem;font-weight:500;display:flex;align-items:center;gap:.6rem">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Licença Ambiental IBAMA
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── IMPACTO AMBIENTAL ─── -->
+<section id="impacto">
+  <div class="section-inner">
+    <div class="impact-grid">
+      <div class="fade-up">
+        <div class="section-tag green">Impacto Ambiental</div>
+        <h2 class="section-title">Cada descarte correto é um ato de <span style="color:var(--green-accent)">preservação</span></h2>
+        <p class="section-sub" style="margin-bottom:2rem">
+          O ECOQuímica nasceu com um propósito claro: reduzir o impacto ambiental causado pelo manuseio e descarte inadequado de produtos químicos. Acreditamos que tecnologia e educação são as melhores ferramentas para isso.
+        </p>
+        <p class="section-sub">
+          Ao conectar usuários a empresas certificadas e oferecer educação sobre riscos ambientais, criamos uma corrente de responsabilidade que beneficia comunidades, ecossistemas e gerações futuras.
+        </p>
+        <div style="margin-top:2rem;display:flex;align-items:center;gap:.8rem;padding:1.2rem 1.5rem;background:rgba(34,197,94,0.08);border-radius:1rem;border:1px solid rgba(34,197,94,0.2)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M7 13s1 2 5 2 5-2 5-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <p style="font-size:.9rem;color:#15803D;font-weight:500">
+            Comprometidos com os ODS da ONU — Saúde, Água Limpa e Vida Terrestre
+          </p>
+        </div>
+      </div>
+      <div class="impact-stats fade-up fade-up-delay-2">
+        <div class="impact-stat-card">
+          <span class="stat-n">3.500+</span>
+          <span class="stat-l">Descartes incorretos evitados por ano com o app</span>
+        </div>
+        <div class="impact-stat-card green">
+          <span class="stat-n">200+</span>
+          <span class="stat-l">Empresas certificadas de descarte no Brasil</span>
+        </div>
+        <div class="impact-stat-card light">
+          <span class="stat-n" style="color:var(--blue-primary)">GHS</span>
+          <span class="stat-l" style="color:var(--gray-600);opacity:1">Padrão global adotado em 67+ países</span>
+        </div>
+        <div class="impact-stat-card" style="background:linear-gradient(135deg,#0B1F4A,#1246A8)">
+          <span class="stat-n">24/7</span>
+          <span class="stat-l">Acesso às informações, onde e quando precisar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MOCKUPS ─── -->
+<section class="mockup-section">
+  <div class="section-inner">
+    <div class="fade-up">
+      <div class="section-tag">O App em Ação</div>
+      <h2 class="section-title">Veja o ECOQuímica funcionando</h2>
+      <p class="section-sub">Interface limpa, moderna e pensada para facilitar a sua rotina com produtos químicos.</p>
+    </div>
+    <div class="mockup-phones">
+      <!-- Phone 1: FDS List -->
+      <div class="mockup-phone fade-up fade-up-delay-1" style="width:200px">
+        <div class="mockup-phone-screen" style="height:420px">
+          <div class="mock-header">
+            <div class="mock-header-title">Meus Produtos</div>
+            <div class="mock-header-sub">8 produtos cadastrados</div>
+          </div>
+          <div class="mock-body">
+            <div class="mock-search">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Buscar produto...
+            </div>
+            <div class="mock-item">
+              <div class="mock-item-dot" style="background:linear-gradient(135deg,#DC2626,#F87171)"></div>
+              <div>
+                <div class="mock-item-name">Ácido Sulfúrico</div>
+                <div class="mock-item-cas">H₂SO₄ · PA</div>
+                <span class="mock-badge danger">⚠ Alto risco</span>
+              </div>
+            </div>
+            <div class="mock-item">
+              <div class="mock-item-dot" style="background:linear-gradient(135deg,#1246A8,#3B9EFF)"></div>
+              <div>
+                <div class="mock-item-name">Acetona</div>
+                <div class="mock-item-cas">C₃H₆O · PA</div>
+                <span class="mock-badge" style="background:#FEF9C3;color:#713F12">Inflamável</span>
+              </div>
+            </div>
+            <div class="mock-item">
+              <div class="mock-item-dot" style="background:linear-gradient(135deg,#15803D,#22C55E)"></div>
+              <div>
+                <div class="mock-item-name">Etanol</div>
+                <div class="mock-item-cas">C₂H₅OH · 95%</div>
+                <span class="mock-badge safe">✓ Regularizado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone 2: FDS Detail (center, highlighted) -->
+      <div class="mockup-phone center fade-up fade-up-delay-2" style="width:220px">
+        <div class="mockup-phone-screen" style="height:460px">
+          <div class="mock-header" style="padding:1.4rem 1.5rem 1rem">
+            <div class="mock-header-title">Ficha de Segurança</div>
+            <div class="mock-header-sub">Ácido Sulfúrico · H₂SO₄</div>
+          </div>
+          <div class="mock-body">
+            <!-- Pictogramas -->
+            <div style="display:flex;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap">
+              <div style="width:42px;height:42px;border:2px solid #DC2626;border-radius:6px;display:grid;place-items:center;font-size:1.2rem;background:#FEF2F2">⚗</div>
+              <div style="width:42px;height:42px;border:2px solid #DC2626;border-radius:6px;display:grid;place-items:center;font-size:1.2rem;background:#FEF2F2">☣</div>
+              <div style="width:42px;height:42px;border:2px solid #F59E0B;border-radius:6px;display:grid;place-items:center;font-size:1.2rem;background:#FFFBEB">⚠</div>
+            </div>
+            <div style="background:#fff;border-radius:10px;padding:.8rem;border:1px solid var(--gray-200);margin-bottom:.6rem">
+              <div style="font-size:.65rem;font-weight:700;color:var(--blue-primary);margin-bottom:.3rem">CLASSIFICAÇÃO GHS</div>
+              <div style="font-size:.68rem;color:var(--gray-600)">Corrosivo para metais · Cat. 1</div>
+              <div style="font-size:.68rem;color:var(--gray-600)">Toxicidade aguda · Cat. 4</div>
+            </div>
+            <div style="background:#FEF2F2;border-radius:10px;padding:.8rem;border-left:3px solid #DC2626;margin-bottom:.6rem">
+              <div style="font-size:.62rem;color:#991B1B;font-weight:600">⚡ INCOMPATÍVEL COM:</div>
+              <div style="font-size:.6rem;color:#7F1D1D;margin-top:.3rem">Bases fortes · Metais · Oxidantes</div>
+            </div>
+            <div style="background:#DCFCE7;border-radius:10px;padding:.8rem;border:1px solid rgba(34,197,94,0.3)">
+              <div style="font-size:.62rem;color:#15803D;font-weight:600">📍 Descarte: EcoDescarte SP</div>
+              <div style="font-size:.6rem;color:#166534;margin-top:.2rem">Coletora credenciada · 2,4 km</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone 3: Map / Disposal -->
+      <div class="mockup-phone fade-up fade-up-delay-3" style="width:200px">
+        <div class="mockup-phone-screen" style="height:420px">
+          <div class="mock-header">
+            <div class="mock-header-title">Pontos de Descarte</div>
+            <div class="mock-header-sub">5 empresas próximas</div>
+          </div>
+          <div class="mock-body">
+            <div class="map-placeholder">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Mapa interativo</span>
+              <span style="font-size:.65rem;color:var(--gray-400);font-weight:400">GPS ativo</span>
+            </div>
+            <div class="mock-item" style="margin-top:.7rem">
+              <div style="width:30px;height:30px;border-radius:8px;background:rgba(34,197,94,0.15);display:grid;place-items:center;flex-shrink:0;color:#15803D;font-size:.8rem">♻</div>
+              <div>
+                <div class="mock-item-name">EcoDescarte SP</div>
+                <div class="mock-item-cas">2,4 km · Certificada IBAMA</div>
+              </div>
+            </div>
+            <div class="mock-item">
+              <div style="width:30px;height:30px;border-radius:8px;background:rgba(18,70,168,0.10);display:grid;place-items:center;flex-shrink:0;color:var(--blue-primary);font-size:.8rem">🏭</div>
+              <div>
+                <div class="mock-item-name">QuimiRecicla</div>
+                <div class="mock-item-cas">3,7 km · Resíduos classe I</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA FINAL ─── -->
+<section class="cta-section">
+  <div class="section-inner" style="position:relative">
+    <div class="fade-up">
+      <div class="section-tag green" style="display:inline-block;margin:0 auto 1rem">Comece Agora</div>
+      <h2 class="section-title" style="max-width:700px;margin:0 auto 1rem">Pronto para transformar sua relação com a química?</h2>
+      <p class="section-sub" style="margin:0 auto">Baixe o ECOQuímica gratuitamente e dê o primeiro passo para uma gestão mais segura, informada e responsável com o meio ambiente.</p>
+      <div class="cta-btns">
+        <a href="#" class="cta-btn-white">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Baixar na App Store
+        </a>
+        <a href="#" class="cta-btn-outline">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.37.21.8.21 1.17.01l11.56-6.43-2.54-2.55-10.19 8.97zm14.11-7.83l2.6-1.45c.74-.41.74-1.53 0-1.94l-2.6-1.45-2.72 2.42 2.72 2.42zM4.35.24c-.38-.21-.81-.21-1.17.01L13.37 9.2l2.54-2.55L4.35.24zM2.44 1.1C2.17 1.45 2 1.92 2 2.46v19.08c0 .54.17 1.01.44 1.36l.07.07 10.69-10.69v-.25L2.51 1.03l-.07.07z"/></svg>
+          Google Play
+        </a>
+      </div>
+      <div class="cta-trust">
+        <div class="cta-trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          100% Gratuito
+        </div>
+        <div class="cta-trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Seus dados protegidos
+        </div>
+        <div class="cta-trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Sem anúncios
+        </div>
+        <div class="cta-trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          GPS integrado
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <span class="logo-footer"><span>ECO</span>Química</span>
+  <p>© 2025 ECOQuímica · Gestão inteligente de produtos químicos com responsabilidade socioambiental</p>
+  <p style="margin-top:.4rem;font-size:.78rem;opacity:.4">Desenvolvido com propósito e cuidado com o futuro 🌱</p>
+</footer>
+
+<script>
+  // Intersection Observer for fade-up animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach(el => {
+    // Skip elements already visible (hero content)
+    if (!el.classList.contains('visible')) {
+      observer.observe(el);
+    }
+  });
+</script>
+</body>
+</html>
