@@ -166,10 +166,6 @@ Projeto desenvolvido para fins acadêmicos como requisito de aprendizagem e apli
 
 ---
 
-## 👨‍💻 Autor
-
-**Guilherme Henrique A. Domingues**
-
 GitHub:
 https://github.com/GuilhermeHADomingues
 
