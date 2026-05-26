@@ -1,71 +1,180 @@
-<div align="center">
-<br/>
-🧪 ECOQuímica
-Gestão Inteligente de Produtos Químicos com Responsabilidade Socioambiental
-<br/>
-![HTML5](https://developer.mozilla.org/pt-BR/docs/Web/HTML)
-![CSS3](https://developer.mozilla.org/pt-BR/docs/Web/CSS)
-![JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)
-![Alpine.js](https://alpinejs.dev/)
-<br/>
-> \*\*Projeto Acadêmico · STARCODE · UPX I\*\*
-> Desenvolvido com propósito e cuidado com o futuro 🌱
-<br/>
+# 🌱 ECOQuímica — Gestão Inteligente de Produtos Químicos
+
+> Plataforma desenvolvida para simplificar a consulta de informações químicas, promover a educação em segurança laboratorial e incentivar o descarte correto de resíduos químicos.
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
+![Alpine.js](https://img.shields.io/badge/Alpine.js-77C1D2?style=flat&logo=alpinedotjs&logoColor=white)
+![Responsive](https://img.shields.io/badge/Responsive-Sim-success?style=flat)
+![Status](https://img.shields.io/badge/Status-Concluído-brightgreen?style=flat)
+
 ---
-</div>
-📋 Sobre o Projeto
-O ECOQuímica é uma solução mobile-first que visa transformar a forma como indivíduos e empresas gerenciam produtos químicos no Brasil. Combinando tecnologia, educação e responsabilidade ambiental, o app oferece inventário digital, fichas de segurança (FDS/FISPQ) acessíveis e localização inteligente de pontos de descarte certificados.
-Este repositório contém a landing page oficial do projeto, desenvolvida do zero pela equipe STARCODE como parte da disciplina UPX I — Projeto Integrador da graduação.
+
+## 📖 Sobre o Projeto
+
+O **ECOQuímica** é uma plataforma digital criada para facilitar o acesso a informações relacionadas ao manuseio, armazenamento e descarte de produtos químicos.
+
+O projeto surgiu da necessidade de tornar conteúdos técnicos, como as **Fichas de Dados de Segurança (FDS)**, mais acessíveis para estudantes, profissionais e empresas, promovendo práticas mais seguras e sustentáveis.
+
+Além da consulta de informações químicas, a plataforma oferece recursos educacionais voltados à interpretação de riscos, normas de segurança e descarte ambientalmente correto de resíduos químicos.
+
 ---
-✨ Funcionalidades Apresentadas na Landing Page
-Seção	Descrição
-🏠 Hero	Apresentação do produto com mockup animado do aplicativo
-⚠️ O Problema	Diagnóstico do cenário atual: descarte irregular, falta de informação e riscos à segurança
-💡 A Solução	Como o ECOQuímica endereça cada dor identificada
-🔧 Funcionalidades	Inventário inteligente, FDS digital, alertas de vencimento, localização GPS de descartes
-🎓 Educação	Conteúdos sobre classificação GHS, pictogramas e legislação ambiental
-🌍 Impacto	Estatísticas e metas de impacto socioambiental
-📱 Mockups	Telas reais do aplicativo em funcionamento
-📲 CTA	Chamada para download nas lojas App Store e Google Play
+
+## 🎯 Objetivos
+
+- Facilitar a consulta de informações químicas.
+- Promover a educação em segurança química.
+- Auxiliar no descarte correto de resíduos.
+- Reduzir riscos relacionados ao manuseio inadequado de substâncias.
+- Incentivar práticas sustentáveis e ambientalmente responsáveis.
+
 ---
-🛠️ Tecnologias Utilizadas
-HTML5 — Estrutura semântica e acessível
-CSS3 — Animações, gradientes, layout responsivo com Grid e Flexbox
-JavaScript (Vanilla) — Intersection Observer para animações de scroll
-Alpine.js v3.13 — Reatividade leve para menu mobile e estado da navbar
-Lucide Icons — Biblioteca de ícones SVG
-Google Fonts — Outfit — Tipografia principal
+
+## 🚀 Funcionalidades
+
+### 📄 Gestão de Fichas de Segurança (FDS)
+
+- Consulta rápida de FDS
+- Busca por nome da substância
+- Busca por fórmula química
+- Busca por número CAS
+- Organização centralizada das informações
+
+### 🛡️ Educação e Segurança
+
+- Interpretação de pictogramas GHS
+- Explicação do Diagrama de Hommel (NFPA 704)
+- Compatibilidade entre reagentes químicos
+- Conteúdo educativo sobre riscos químicos
+- Informações sobre normas de segurança
+
+### ♻️ Destinação de Resíduos
+
+- Localização de empresas especializadas
+- Consulta de pontos de descarte
+- Orientação sobre descarte adequado
+- Apoio à conformidade ambiental
+
 ---
-📁 Estrutura do Projeto
-```
-ecoquimica-landingpage/
+
+## 💡 Benefícios
+
+✔ Redução de riscos químicos
+
+✔ Facilidade na interpretação de documentos técnicos
+
+✔ Economia de tempo na busca de informações
+
+✔ Educação ambiental integrada
+
+✔ Incentivo à sustentabilidade
+
+✔ Acesso rápido e intuitivo em qualquer dispositivo
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- HTML5
+- CSS3
+- JavaScript
+- Alpine.js
+- Google Fonts
+- Lucide Icons
+
+---
+
+## 📱 Responsividade
+
+A aplicação foi desenvolvida utilizando conceitos de **Responsive Web Design**, garantindo uma experiência consistente em:
+
+- Smartphones
+- Tablets
+- Notebooks
+- Desktops
+
+---
+
+## 📂 Estrutura do Projeto
+
+```bash
+ECOquimica-landingpage/
 │
-├── index.html          # Landing page completa (single file)
-└── README.md           # Documentação do projeto
+├── index.html
+├── assets/
+│   ├── imagens/
+│   ├── icones/
+│   └── estilos/
+│
+├── scripts/
+│
+└── README.md
 ```
-> A landing page foi construída como um único arquivo HTML autocontido, facilitando o deploy e a manutenção.
+
 ---
-🎨 Design System
-A identidade visual do ECOQuímica reflete os valores do produto:
-Token	Cor	Uso
-`--blue-deep`	`#0B1F4A`	Fundo hero, footer
-`--blue-primary`	`#1246A8`	Cor principal, CTAs
-`--blue-light`	`#3B9EFF`	Destaques, gradientes
-`--green-accent`	`#22C55E`	Sustentabilidade, badges seguros
-`--green-light`	`#86EFAC`	Textos sobre fundo escuro
+
+## ▶️ Como Executar
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/GuilhermeHADomingues/ECOquimica-landingpage.git
+```
+
+Entre na pasta:
+
+```bash
+cd ECOquimica-landingpage
+```
+
+Abra o arquivo:
+
+```bash
+index.html
+```
+
+ou execute utilizando a extensão **Live Server** do VS Code.
+
 ---
-🌱 Impacto Esperado
-O ECOQuímica nasce da necessidade real de democratizar o acesso à informação química segura no Brasil:
-♻️ Redução do descarte irregular de químicos em domicílios e empresas
-📚 Educação sobre GHS, FISPQ e normas ambientais brasileiras
-🏭 Conexão entre geradores de resíduos e coletoras credenciadas pelo IBAMA
-🔔 Alertas proativos de vencimento e incompatibilidade de produtos
+
+## 👥 Público-Alvo
+
+- Estudantes de Química
+- Técnicos de Laboratório
+- Pesquisadores
+- Profissionais da Indústria
+- Empresas que trabalham com produtos químicos
+- Instituições de Ensino
+
 ---
+
+## 🌎 Impacto Social e Ambiental
+
+O ECOQuímica busca contribuir para:
+
+- Redução da contaminação ambiental causada por descarte incorreto.
+- Disseminação de conhecimento sobre segurança química.
+- Promoção de práticas sustentáveis.
+- Maior conscientização sobre riscos químicos e ambientais.
+
 ---
-📄 Licença
-Este projeto foi desenvolvido exclusivamente para fins acadêmicos no contexto da disciplina UPX I. Todos os direitos reservados à equipe STARCODE.
+
+## 📚 Projeto Acadêmico
+
+Projeto desenvolvido para fins acadêmicos como requisito de aprendizagem e aplicação prática de conceitos de desenvolvimento web, experiência do usuário (UX/UI), sustentabilidade e segurança química.
+
 ---
-<div align="center">
-Feito com 💙 e 🌿 pela equipe STARCODE
-© 2025 ECOQuímica · Gestão inteligente de produtos químicos
-</div>
+
+## 👨‍💻 Autor
+
+**Guilherme Henrique A. Domingues**
+
+GitHub:
+https://github.com/GuilhermeHADomingues
+
+---
+
+## 📄 Licença
+
+Este projeto foi desenvolvido exclusivamente para fins educacionais e acadêmicos.
